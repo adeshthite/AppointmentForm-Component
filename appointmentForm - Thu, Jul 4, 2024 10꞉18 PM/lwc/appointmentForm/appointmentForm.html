@@ -1,0 +1,57 @@
+<template>
+	<lightning-card>
+		<lightning-layout multiple-rows>
+			<lightning-layout-item size="12" padding="around-small" small-device-size="3" medium-device-size="6"
+				large-device-size="8">
+				<div class="slds-box">
+					<lightning-card variant="Narrow" title="Appointment Form" icon-name="standard:account">
+						<lightning-record-edit-form object-api-name="Appointment_Detail__c" onsuccess={handleSucess}
+							onsubmit={handleSubmit}>
+							<lightning-messages></lightning-messages>
+							<div class="slds-p-left_x-large">
+
+								<lightning-input-field field-name="Name" required ></lightning-input-field>
+								<lightning-input-field field-name="Contact__c" required ></lightning-input-field>
+
+								<lightning-input-field field-name="Appointment_Date__c" required
+									onchange={appoinmentDate}>
+								</lightning-input-field>
+
+								<lightning-input-field field-name="Appointment_Time__c" required
+									onchange={appoinmentTime}>
+
+								</lightning-input-field>
+
+								<div>
+									<lightning-input-field field-name="Description__c" required ></lightning-input-field>
+								</div>
+								<!-- submit -->
+
+								</br>
+								<div class="slds-align_absolute-center">
+									<lightning-button variant="brand" type="submit" label="Submit"></lightning-button>
+								</div>
+							</div>
+						</lightning-record-edit-form>
+					</lightning-card>
+				</div>
+			</lightning-layout-item>
+
+			<lightning-layout-item size="12" padding="around-small" small-device-size="3" medium-device-size="6"
+				large-device-size="4">
+				<div class="slds-box">
+					<lightning-layout-item size="12" padding="around-small" small-device-size="3" medium-device-size="6"
+						large-device-size="4">
+						<lightning-card variant="Narrow" title="Available Appointment Dates "
+							icon-name="standard:account">
+							<div class="slds-align_absolute-center" style="color:red; font-size:40px ">
+								{dateCount}
+							</div>
+
+						</lightning-card>
+					</lightning-layout-item>
+				</div>
+			</lightning-layout-item>
+		</lightning-layout>
+	</lightning-card>
+</template>
