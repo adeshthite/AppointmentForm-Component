@@ -61,7 +61,7 @@ export default class AppointmentForm extends  LightningElement {
             });
 
 
-      //  window.location.reload();
+ 
 
     }
 
@@ -86,6 +86,7 @@ export default class AppointmentForm extends  LightningElement {
             mode: 'dismissable'
         });
         this.dispatchEvent(event1);
+            window.location.reload();
 
 
      }
