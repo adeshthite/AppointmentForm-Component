@@ -15,6 +15,11 @@ public class AppointmentSlotApex {
 
      @AuraEnabled(cacheable=true)
     public static Boolean checkDuplicateAppointment(String appoinmentTimes,Date appoinmentDatess ) {
+        if(checkDuplicateAppointments(appoinmentTimes,appoinmentDatess)){
+              throw new AuraHandledException('An appointment already exists for the specified date and time.');
+
+        }
+
         try {
             List<String> timeParts = appoinmentTimes.split(':');
             Integer hours = Integer.valueOf(timeParts[0]);
@@ -22,7 +27,9 @@ public class AppointmentSlotApex {
             Integer seconds = Integer.valueOf(timeParts[2]);
             
             Time appointmentTime = Time.newInstance(hours, minutes, seconds, 0);
-            List<Appointment_Slot__c> appointments = [SELECT Id FROM Appointment_Slot__c WHERE Start_Time__c = :appointmentTime and Appointment_Date__c=: appoinmentDatess and isActive__c = TRUE];
+            List<Appointment_Slot__c> appointments = [SELECT Id FROM Appointment_Slot__c WHERE Start_Time__c <=: appointmentTime and End_Time__c >: appointmentTime  and Appointment_Date__c=: appoinmentDatess and isActive__c = TRUE];
+
+
             return appointments.size() > 0;
 
         } catch (Exception e) {
@@ -30,11 +37,8 @@ public class AppointmentSlotApex {
         }
     }
 
-     @AuraEnabled(cacheable=true)
+      @AuraEnabled(cacheable=true)
     public static Boolean checkDuplicateAppointments(String appoinmentTimes,Date appoinmentDatess ) {
-         if (checkDuplicateAppointment(appoinmentTimes, appoinmentDatess)) {
-            throw new AuraHandledException('An appointment already exists for the specified date and time.');
-        }
         try {
             List<String> timeParts = appoinmentTimes.split(':');
             Integer hours =   Integer.valueOf(timeParts[0]);
@@ -47,6 +51,8 @@ public class AppointmentSlotApex {
         } catch (Exception e) {
             throw new AuraHandledException('Invalid time format: ' + appoinmentTimes);
         }
+    
     }
+
 
 }
