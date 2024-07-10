@@ -2,6 +2,8 @@ import { LightningElement, wire, track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import appoappointment from '@salesforce/apex/AppointmentSlotApex.appoappointment';
 import checkDuplicateAppointment from '@salesforce/apex/AppointmentSlotApex.checkDuplicateAppointment';
+//import checkDuplicateAppointments from '@salesforce/apex/AppointmentSlotApex.checkDuplicateAppointments';
+
 
 
 
@@ -14,9 +16,7 @@ export default class AppointmentForm extends  LightningElement {
     appoinmentDates;
     handltime;
    
-
-
-    @wire(appoappointment)
+  @wire(appoappointment)
     wiredAppointments({ error, data }) {
         if (data) {
             this.dates = data;
@@ -42,7 +42,8 @@ export default class AppointmentForm extends  LightningElement {
     
     handleSubmit(event) {
 
-        event.preventDefault();
+
+         event.preventDefault();
         const fields = event.detail.fields;
 
         const timeString = this.handltime;
@@ -51,18 +52,21 @@ export default class AppointmentForm extends  LightningElement {
             .then(result => {
                 if (result) {
                     console.log(this.result);
-                    this.showToast('An appointment at the selected date and time already exists', 'An appointment at the selected date and time already exists.', 'error');
+                   // this.showToast('An appointment  slot not at the  date and time already exists', 'An appointment at the selected date and time already exists.', 'error');
+                  this.template.querySelector('lightning-record-edit-form').submit(fields);
+
+               
                 } else {
-                    this.template.querySelector('lightning-record-edit-form').submit(fields);
+                   this.showToast('An appointment active Slot is not avaliable ', 'An appointment active slot is not avaliable.', 'error');
+                    
+
                 }
             })
             .catch(error => {
                 this.showToast('Error', error.body.message, 'error');
             });
 
-
- 
-
+      
     }
 
     showToast(title, message, variant) {
@@ -73,7 +77,7 @@ export default class AppointmentForm extends  LightningElement {
         });
         this.dispatchEvent(event);
     }
-
+    
     handleSucess(event) {
 
         const updatedRecord = event.detail.id;
@@ -86,9 +90,8 @@ export default class AppointmentForm extends  LightningElement {
             mode: 'dismissable'
         });
         this.dispatchEvent(event1);
-            window.location.reload();
-
-
+        window.location.reload();
      }
 
 }
+
